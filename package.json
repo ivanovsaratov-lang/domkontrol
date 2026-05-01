@@ -1,0 +1,9 @@
+{
+  "name": "domkontrol",
+  "version": "1.0.0",
+  "description": "DomKontrol Telegram bot",
+  "main": "index.js",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.67.0"
+  }
+}
