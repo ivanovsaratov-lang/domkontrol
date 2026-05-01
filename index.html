@@ -4,9 +4,127 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DomKontrol</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #ffffff;
+      padding: 20px;
+    }
+
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .card {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .task {
+      padding: 12px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .task:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .task-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .task-meta {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .button-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+  </style>
 </head>
 <body>
-  <h1>DomKontrol запущен</h1>
-  <p>Первый тестовый запуск через Vercel.</p>
+  <div class="app">
+    <div class="header">
+      <h1 class="title">ДомКонтрол</h1>
+      <p class="subtitle">AI-секретарь дома: задачи, деньги, прозрачность</p>
+    </div>
+
+    <div class="card">
+      <h2>Проблемы дома</h2>
+
+      <div class="task">
+        <div class="task-title">Лифт не работает</div>
+        <div class="task-meta">Статус: новая · Ответственный: не назначен</div>
+      </div>
+
+      <div class="task">
+        <div class="task-title">Свет в подъезде мигает</div>
+        <div class="task-meta">Статус: в работе · Ответственный: председатель</div>
+      </div>
+
+      <button class="button">Сообщить о проблеме</button>
+    </div>
+
+    <div class="card">
+      <h2>Финансы дома</h2>
+      <div class="task">
+        <div class="task-title">Баланс дома: 1 240 лв</div>
+        <div class="task-meta">Последнее обновление: сегодня</div>
+      </div>
+
+      <button class="button button-secondary">Открыть финансы</button>
+    </div>
+  </div>
 </body>
 </html>
