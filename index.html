@@ -92,6 +92,39 @@
       background: #e5e7eb;
       color: #111827;
     }
+
+    .hidden {
+      display: none;
+    }
+
+    .form-box {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .input,
+    .textarea {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 15px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+
+    .textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .success-message {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #047857;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -104,17 +137,41 @@
     <div class="card">
       <h2>Проблемы дома</h2>
 
-      <div class="task">
-        <div class="task-title">Лифт не работает</div>
-        <div class="task-meta">Статус: новая · Ответственный: не назначен</div>
+      <div id="taskList">
+        <div class="task">
+          <div class="task-title">Лифт не работает</div>
+          <div class="task-meta">Статус: новая · Ответственный: не назначен</div>
+        </div>
+
+        <div class="task">
+          <div class="task-title">Свет в подъезде мигает</div>
+          <div class="task-meta">Статус: в работе · Ответственный: председатель</div>
+        </div>
       </div>
 
-      <div class="task">
-        <div class="task-title">Свет в подъезде мигает</div>
-        <div class="task-meta">Статус: в работе · Ответственный: председатель</div>
-      </div>
+      <button class="button" id="showProblemFormBtn">Сообщить о проблеме</button>
 
-      <button class="button">Сообщить о проблеме</button>
+      <div class="form-box hidden" id="problemFormBox">
+        <input
+          type="text"
+          id="problemTitle"
+          class="input"
+          placeholder="Коротко: что случилось?"
+        />
+
+        <textarea
+          id="problemDescription"
+          class="textarea"
+          placeholder="Опишите проблему подробнее..."
+        ></textarea>
+
+        <button class="button" id="saveProblemBtn">Отправить</button>
+        <button class="button button-secondary" id="cancelProblemBtn">Отмена</button>
+
+        <div class="success-message hidden" id="successMessage">
+          Проблема добавлена в список.
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -134,13 +191,61 @@
     tg.ready();
     tg.expand();
 
-    console.log("Telegram Mini App loaded");
-
     const appTitle = document.querySelector(".title");
     if (appTitle && tg.initDataUnsafe && tg.initDataUnsafe.user) {
       const user = tg.initDataUnsafe.user;
       appTitle.textContent = `ДомКонтрол, ${user.first_name}`;
     }
+
+    const showProblemFormBtn = document.getElementById("showProblemFormBtn");
+    const problemFormBox = document.getElementById("problemFormBox");
+    const saveProblemBtn = document.getElementById("saveProblemBtn");
+    const cancelProblemBtn = document.getElementById("cancelProblemBtn");
+    const successMessage = document.getElementById("successMessage");
+    const taskList = document.getElementById("taskList");
+    const problemTitle = document.getElementById("problemTitle");
+    const problemDescription = document.getElementById("problemDescription");
+
+    showProblemFormBtn.addEventListener("click", () => {
+      problemFormBox.classList.remove("hidden");
+      successMessage.classList.add("hidden");
+    });
+
+    cancelProblemBtn.addEventListener("click", () => {
+      problemFormBox.classList.add("hidden");
+      problemTitle.value = "";
+      problemDescription.value = "";
+      successMessage.classList.add("hidden");
+    });
+
+    saveProblemBtn.addEventListener("click", () => {
+      const title = problemTitle.value.trim();
+      const description = problemDescription.value.trim();
+
+      if (!title) {
+        alert("Введите название проблемы");
+        return;
+      }
+
+      const task = document.createElement("div");
+      task.className = "task";
+      task.innerHTML = `
+        <div class="task-title">${title}</div>
+        <div class="task-meta">Статус: новая · Ответственный: не назначен</div>
+      `;
+
+      taskList.prepend(task);
+
+      problemTitle.value = "";
+      problemDescription.value = "";
+      successMessage.classList.remove("hidden");
+      problemFormBox.classList.add("hidden");
+
+      console.log("Новая проблема:", {
+        title,
+        description
+      });
+    });
   </script>
 </body>
 </html>
