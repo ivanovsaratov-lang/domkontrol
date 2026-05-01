@@ -188,64 +188,72 @@
   <script>
     const tg = window.Telegram.WebApp;
 
-    tg.ready();
-    tg.expand();
+  tg.ready();
+  tg.expand();
 
-    const appTitle = document.querySelector(".title");
-    if (appTitle && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-      const user = tg.initDataUnsafe.user;
-      appTitle.textContent = `ДомКонтрол, ${user.first_name}`;
+  const appTitle = document.querySelector(".title");
+  if (appTitle && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+    const user = tg.initDataUnsafe.user;
+    appTitle.textContent = `ДомКонтрол, ${user.first_name}`;
+  }
+
+  const showProblemFormBtn = document.getElementById("showProblemFormBtn");
+  const problemFormBox = document.getElementById("problemFormBox");
+  const saveProblemBtn = document.getElementById("saveProblemBtn");
+  const cancelProblemBtn = document.getElementById("cancelProblemBtn");
+  const successMessage = document.getElementById("successMessage");
+  const taskList = document.getElementById("taskList");
+  const problemTitle = document.getElementById("problemTitle");
+  const problemDescription = document.getElementById("problemDescription");
+
+  showProblemFormBtn.addEventListener("click", () => {
+    problemFormBox.classList.remove("hidden");
+    successMessage.classList.add("hidden");
+  });
+
+  cancelProblemBtn.addEventListener("click", () => {
+    problemFormBox.classList.add("hidden");
+    problemTitle.value = "";
+    problemDescription.value = "";
+    successMessage.classList.add("hidden");
+  });
+
+  saveProblemBtn.addEventListener("click", () => {
+    const title = problemTitle.value.trim();
+    const description = problemDescription.value.trim();
+
+    if (!title) {
+      tg.showAlert("Введите название проблемы");
+      return;
     }
 
-    const showProblemFormBtn = document.getElementById("showProblemFormBtn");
-    const problemFormBox = document.getElementById("problemFormBox");
-    const saveProblemBtn = document.getElementById("saveProblemBtn");
-    const cancelProblemBtn = document.getElementById("cancelProblemBtn");
-    const successMessage = document.getElementById("successMessage");
-    const taskList = document.getElementById("taskList");
-    const problemTitle = document.getElementById("problemTitle");
-    const problemDescription = document.getElementById("problemDescription");
+    const payload = {
+      type: "new_problem",
+      title,
+      description,
+      created_at: new Date().toISOString()
+    };
 
-    showProblemFormBtn.addEventListener("click", () => {
-      problemFormBox.classList.remove("hidden");
-      successMessage.classList.add("hidden");
-    });
+    const task = document.createElement("div");
+    task.className = "task";
+    task.innerHTML = `
+      <div class="task-title">${title}</div>
+      <div class="task-meta">Статус: новая · Ответственный: не назначен</div>
+    `;
 
-    cancelProblemBtn.addEventListener("click", () => {
-      problemFormBox.classList.add("hidden");
-      problemTitle.value = "";
-      problemDescription.value = "";
-      successMessage.classList.add("hidden");
-    });
+    taskList.prepend(task);
 
-    saveProblemBtn.addEventListener("click", () => {
-      const title = problemTitle.value.trim();
-      const description = problemDescription.value.trim();
+    problemTitle.value = "";
+    problemDescription.value = "";
+    successMessage.classList.remove("hidden");
+    problemFormBox.classList.add("hidden");
 
-      if (!title) {
-        alert("Введите название проблемы");
-        return;
-      }
-
-      const task = document.createElement("div");
-      task.className = "task";
-      task.innerHTML = `
-        <div class="task-title">${title}</div>
-        <div class="task-meta">Статус: новая · Ответственный: не назначен</div>
-      `;
-
-      taskList.prepend(task);
-
-      problemTitle.value = "";
-      problemDescription.value = "";
-      successMessage.classList.remove("hidden");
-      problemFormBox.classList.add("hidden");
-
-      console.log("Новая проблема:", {
-        title,
-        description
-      });
-    });
-  </script>
+    if (tg.sendData) {
+      tg.sendData(JSON.stringify(payload));
+    } else {
+      console.log("sendData недоступен в этом режиме запуска", payload);
+    }
+  });
+</script>
 </body>
 </html>
