@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DomKontrol</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -126,5 +127,20 @@
       <button class="button button-secondary">Открыть финансы</button>
     </div>
   </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
+    tg.expand();
+
+    console.log("Telegram Mini App loaded");
+
+    const appTitle = document.querySelector(".title");
+    if (appTitle && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      const user = tg.initDataUnsafe.user;
+      appTitle.textContent = `ДомКонтрол, ${user.first_name}`;
+    }
+  </script>
 </body>
 </html>
